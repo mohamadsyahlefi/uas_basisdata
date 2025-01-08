@@ -1,0 +1,27 @@
+DELIMITER //
+
+CREATE TRIGGER after_post_insert
+AFTER INSERT ON tbl_posts
+FOR EACH ROW
+BEGIN
+    INSERT INTO tbl_log (keterangan, user, title_baru, waktu)
+    VALUES ('Insert', NEW.user_id, NEW.title, NOW());
+END; //
+
+CREATE TRIGGER after_post_update
+AFTER UPDATE ON tbl_posts
+FOR EACH ROW
+BEGIN
+    INSERT INTO tbl_log (keterangan, user, title_lama, title_baru, waktu)
+    VALUES ('Update', NEW.user_id, OLD.title, NEW.title, NOW());
+END; //
+
+CREATE TRIGGER after_post_delete
+AFTER DELETE ON tbl_posts
+FOR EACH ROW
+BEGIN
+    INSERT INTO tbl_log (keterangan, user, title_lama, waktu)
+    VALUES ('Delete', OLD.user_id, OLD.title, NOW());
+END; //
+
+DELIMITER ;
